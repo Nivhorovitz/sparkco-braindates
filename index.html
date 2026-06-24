@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sparkco Braindates</title>
+  <meta name="description" content="Sparkco Braindates — כלי פשוט לחיבורים חכמים בקהילה." />
+  <link rel="icon" href="./logo_green.png" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="./logo_green.png" alt="Sparkco" />
+        <div><p class="eyebrow">Community OS</p><h1>Sparkco<br>Braindates</h1></div>
+      </div>
+      <nav class="nav" aria-label="ניווט ראשי">
+        <button class="nav-item active" data-view="profile">הפרופיל שלי</button>
+        <button class="nav-item" data-view="matches">התאמות</button>
+        <button class="nav-item" data-view="people">מפת אנשים</button>
+        <button class="nav-item" data-view="invites">הזמנות</button>
+        <button class="nav-item" data-view="admin">אדמין קהילה</button>
+      </nav>
+      <div class="side-card"><span class="pulse"></span><p>המטרה: להפוך ידע סמוי בקהילה למפגשים אמיתיים.</p></div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">Prototype v2 · GitHub Pages ready</p><h2 id="viewTitle">הפרופיל שלי</h2></div>
+        <div class="top-actions"><button class="ghost" id="seedDemo">טעינת דמו</button><button class="ghost" id="exportData">ייצוא נתונים</button><button class="primary" id="saveAll">שמירה</button></div>
+      </header>
+
+      <section class="view active" id="profileView">
+        <div class="hero-card"><div><p class="eyebrow">2 דקות</p><h3>בונים פרופיל קצר, והמערכת מציעה את מי כדאי לך לפגוש.</h3><p>המשפט האישי שלך נשאר המרכז. אנחנו לא מחליפים אותו — רק עוזרים לדייק או להעתיק אותו לביו של Sparkco.</p></div><div class="match-orb"><span>Meet</span><strong>Better</strong></div></div>
+        <div class="grid two">
+          <form class="card form-card" id="profileForm">
+            <div class="step-pill">1 · מי אני</div>
+            <label>שם מלא<input id="name" placeholder="לדוגמה: מיכל לוי" autocomplete="name" /></label>
+            <label>תפקיד / משפט זהות קצר<input id="title" placeholder="יזמת, מעצבת, מנהלת קהילה..." /></label>
+            <label>המשפט שלי לקהילה<textarea id="bio" rows="3" placeholder="משפט אחד טבעי על מי אני, מה אני מביאה, ומה מעניין אותי לפגוש"></textarea></label>
+            <div class="helper-card"><strong>עיקרון UX:</strong> המשפט שלך הוא ברירת המחדל לביו בספארקו. אפשר לקבל הצעת דיוק, אבל לא חייבים להשתמש בה.</div>
+            <div class="step-pill">2 · מה אני מביא/ה ומה אני מחפש/ת</div>
+            <div class="field-block"><div class="field-title">מה אני מביא/ה לקהילה</div><div class="chips" id="offersChips"></div></div>
+            <div class="field-block"><div class="field-title">במה אשמח לעזרה</div><div class="chips" id="needsChips"></div></div>
+            <label>על מה אשמח להיפגש<textarea id="meetingTopic" rows="3" placeholder="הייתי שמחה לפגוש מישהי ש..."></textarea></label>
+            <div class="step-pill">3 · זמינות</div>
+            <div class="field-block"><div class="field-title">זמינות כללית</div><div class="chips" id="availabilityChips"></div></div>
+          </form>
+          <aside class="card preview-card">
+            <p class="eyebrow">Sparkco Hover Bio</p><div class="avatar-preview" id="avatarInitials">?</div><h3 id="previewName">השם שלך</h3><p id="previewTitle">התפקיד שלך</p><div class="bio-box" id="previewBio">כאן יופיע המשפט שלך כפי שיועתק לפרופיל Sparkco.</div>
+            <div class="copy-row"><button class="primary" id="copyBio" type="button">העתק את המשפט לספארקו</button><button class="secondary" id="suggestBio" type="button">הצע ניסוח קצר יותר</button></div>
+            <div class="suggestion-box hidden" id="bioSuggestionBox"><p class="eyebrow">הצעת ניסוח</p><p id="bioSuggestion"></p><div class="copy-row"><button class="secondary" id="useSuggestion" type="button">השתמש/י בזה</button><button class="ghost" id="dismissSuggestion" type="button">לא עכשיו</button></div></div>
+            <small id="copyStatus"></small>
+            <div class="next-card"><strong>השלב הבא</strong><p>אחרי שמילאת פרופיל, עבר/י למסך ההתאמות ורא/י עם מי כדאי להיפגש.</p><button class="ghost" data-go="matches">לראות התאמות</button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="matchesView"><div class="section-head"><div><p class="eyebrow">Recommended Braindates</p><h3>אנשים שכדאי לך לפגוש</h3></div><button class="secondary" id="refreshMatches">חשב התאמות מחדש</button></div><div class="match-list" id="matchList"></div></section>
+      <section class="view" id="peopleView"><div class="section-head"><div><p class="eyebrow">Community Map</p><h3>מפת אנשים, ידע וצרכים</h3></div><button class="secondary" id="addDemoPerson">הוסף אנשי דמו</button></div><div class="people-grid" id="peopleGrid"></div></section>
+      <section class="view" id="invitesView"><div class="section-head"><div><p class="eyebrow">Meeting Flow</p><h3>הזמנות לפגישה</h3></div></div><div id="invitesList" class="stack"></div></section>
+      <section class="view" id="adminView"><div class="grid two"><div class="card form-card"><p class="eyebrow">Admin</p><h3>הגדרת שפת החיבורים של הקהילה</h3><label>שם הקהילה<input id="communityName" placeholder="לדוגמה: נשות עסקים בונות קהילה" /></label><label>תגיות יכולת — מופרדות בפסיקים<textarea id="adminOffers" rows="4"></textarea></label><label>תגיות בקשה — מופרדות בפסיקים<textarea id="adminNeeds" rows="4"></textarea></label><button class="primary" id="saveAdmin" type="button">עדכן תגיות</button></div><div class="card insight-card"><p class="eyebrow">Community Intelligence</p><h3>תובנות קהילה</h3><div id="adminInsights"></div></div></div></section>
+    </main>
+  </div>
+
+  <dialog id="inviteDialog"><div class="dialog-card"><button class="x" id="closeInviteX" type="button" aria-label="סגור">×</button><p class="eyebrow">Send Braindate Invite</p><h3 id="inviteTitle">הזמנה לפגישה</h3><div class="match-explain" id="inviteReason"></div><label>הודעה<textarea id="inviteMessage" rows="5"></textarea></label><label>הציעו 3–5 מועדים<textarea id="inviteTimes" rows="4" placeholder="ראשון 10:00&#10;שלישי 17:30&#10;חמישי 20:00"></textarea></label><menu><button class="ghost" id="cancelInvite" type="button">ביטול</button><button class="primary" id="sendInvite" type="button">שליחת הזמנה</button></menu></div></dialog>
+  <script src="./app.js"></script>
+</body>
+</html>
