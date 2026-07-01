@@ -1,34 +1,32 @@
-# Sparkco Braindates
+# Sparkco Braindates v3
 
-Prototype v2 for Sparkco Braindates — a simple community matchmaking layer.
+Profile-first UX prototype for Sparkco Braindates.
 
-## Includes
-- User profile
-- Sparkco hover bio copy flow
-- Community offers / needs tags
-- Match scoring and match explanation
-- Braindate invitation modal
-- Invite status: pending / accepted / declined
-- Admin taxonomy for community tags
-- Local demo data
-- LocalStorage persistence
-- Export data as JSON
+## Main changes
+- Personal profile page
+- Optional fields only
+- User photo / avatar upload
+- Custom tags
+- Meeting style preferences
+- Openness to invitations
+- Current focus
+- Braindate offer
+- Suggested Sparkco rooms
+- Admin reports: overview, needs, offers, gaps, key people
+- Better matching explanations
 
 ## Important limitation
-This is a static prototype. It works well on GitHub Pages, but data is saved only in each user's browser.
+This is a static prototype. It works on GitHub Pages, but data is saved in each user's browser only.
 
-For real multi-user testing, connect it later to a backend such as Supabase, Firebase, Airtable, Google Sheets, or Sparkco's own backend.
+For real multi-user usage, connect it later to Supabase, Firebase, Airtable, Google Sheets, or Sparkco's backend.
 
-## Deploy to GitHub Pages
-1. Create a new GitHub repository, for example `sparkco-braindates`.
-2. Upload these files to the root of the repository:
-   - `index.html`
-   - `styles.css`
-   - `app.js`
-   - `logo_green.png`
-   - `.nojekyll`
-3. Go to Repository → Settings → Pages.
-4. Under Build and deployment choose `Deploy from a branch`.
-5. Choose Branch: `main`, Folder: `/root`.
-6. Save.
-7. Your app will be available at `https://YOUR_USERNAME.github.io/sparkco-braindates/`.
+## GitHub Pages deployment
+Upload these files to the root of your GitHub repository:
+- index.html
+- styles.css
+- app.js
+- logo_green.png
+- README.md
+- .nojekyll
+
+Then go to Settings → Pages → Deploy from a branch → main / root → Save.
