@@ -18,6 +18,7 @@
       <nav class="nav">
         <button class="nav-item active" data-view="profile">הפרופיל שלי</button>
         <button class="nav-item" data-view="matches">התאמות</button>
+        <button class="nav-item" data-view="saved">נשמרו לי</button>
         <button class="nav-item" data-view="people">מפת אנשים</button>
         <button class="nav-item" data-view="rooms">חדרים מוצעים</button>
         <button class="nav-item" data-view="invites">הזמנות</button>
@@ -32,7 +33,7 @@
         <div class="top-actions">
           <button class="ghost" id="seedDemo">טעינת דמו</button>
           <button class="ghost" id="exportData">ייצוא נתונים</button>
-          <button class="primary" id="saveAll">שמירה</button>
+          <span class="connection-pill" id="connectionStatus">מתחבר...</span><button class="primary" id="saveAll">שמירה</button>
         </div>
       </header>
 
@@ -100,6 +101,8 @@
               <div class="mini-grid">
                 <label>אתר / לינקדאין / אינסטגרם<input id="link" placeholder="https://..." /></label>
                 <label>עיר / אזור<input id="location" placeholder="לדוגמה: תל אביב, חיפה, אונליין" /></label>
+                <label>אימייל לשיתוף בהסכמה<input id="email" placeholder="name@example.com" /></label>
+                <label>טלפון לשיתוף בהסכמה<input id="phone" placeholder="05x-xxxxxxx" /></label>
               </div>
             </details>
           </section>
@@ -133,6 +136,14 @@
       </section>
 
       <section class="view" id="matchesView"><div class="section-head"><div><p class="eyebrow">Recommended Braindates</p><h3>אנשים שכדאי לך לפגוש</h3></div><button class="secondary" id="refreshMatches">חשב התאמות מחדש</button></div><div class="match-list" id="matchList"></div></section>
+
+      <section class="view" id="savedView">
+        <div class="section-head">
+          <div><p class="eyebrow">Saved Connections</p><h3>אנשים ששמרתי לאחר כך</h3></div>
+        </div>
+        <div id="savedList" class="stack"></div>
+      </section>
+
       <section class="view" id="peopleView"><div class="section-head"><div><p class="eyebrow">Community Map</p><h3>מפת אנשים, ידע וצרכים</h3></div><button class="secondary" id="addDemoPerson">הוסף אנשי דמו</button></div><div class="people-grid" id="peopleGrid"></div></section>
       <section class="view" id="roomsView"><div class="section-head"><div><p class="eyebrow">Suggested Rooms</p><h3>חדרים ומפגשים שכדאי לפתוח</h3></div></div><div class="rooms-grid" id="roomsGrid"></div></section>
       <section class="view" id="invitesView"><div class="section-head"><div><p class="eyebrow">Meeting Flow</p><h3>הזמנות לפגישה</h3></div></div><div id="invitesList" class="stack"></div></section>
@@ -175,6 +186,7 @@
     </div>
   </dialog>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./app.js"></script>
 </body>
 </html>

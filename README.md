@@ -1,32 +1,19 @@
-# Sparkco Braindates v3
+# Sparkco Braindates v4 Supabase
 
-Profile-first UX prototype for Sparkco Braindates.
+Connected to Supabase.
 
-## Main changes
-- Personal profile page
-- Optional fields only
-- User photo / avatar upload
-- Custom tags
-- Meeting style preferences
-- Openness to invitations
-- Current focus
-- Braindate offer
-- Suggested Sparkco rooms
-- Admin reports: overview, needs, offers, gaps, key people
-- Better matching explanations
+Works:
+- Save profile to Supabase `profiles`
+- Load profiles from Supabase
+- Save connections to `saved_connections`
+- Save private notes/status on saved connections
+- Save invites to `invites`
 
-## Important limitation
-This is a static prototype. It works on GitHub Pages, but data is saved in each user's browser only.
+Important: current Supabase RLS policies are permissive for MVP testing.
+Before collecting real phone/email data, add login and stricter RLS.
 
-For real multi-user usage, connect it later to Supabase, Firebase, Airtable, Google Sheets, or Sparkco's backend.
 
-## GitHub Pages deployment
-Upload these files to the root of your GitHub repository:
-- index.html
-- styles.css
-- app.js
-- logo_green.png
-- README.md
-- .nojekyll
-
-Then go to Settings → Pages → Deploy from a branch → main / root → Save.
+## v4.1 fix
+- Fixes localStorage QuotaExceededError from large profile images.
+- Compresses uploaded images.
+- Keeps localStorage minimal; shared data still saves to Supabase.
