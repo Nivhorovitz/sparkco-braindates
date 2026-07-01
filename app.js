@@ -1,5 +1,5 @@
 
-const APP_VERSION = 'v4.1-supabase-localstorage-fix';
+const APP_VERSION = 'v4.2-supabase-storage';
 const SUPABASE_URL = 'https://cmtbwohbktirmplieeeq.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_tk18F8g4AS7oQF9eV9qGQw_nONj_xiX';
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
@@ -335,29 +335,140 @@ function addCustomTag(inputId,taxonomyKey,userKey){
   $(inputId).value=''; render();
 }
 
-document.querySelectorAll('.nav-item').forEach(btn=>btn.onclick=()=>{ document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); $(btn.dataset.view+'View').classList.add('active'); $('viewTitle').textContent=btn.textContent; });
+
+function dataUrlToBlob(dataUrl){
+  const parts = dataUrl.split(',');
+  const mime = parts[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+  const binary = atob(parts[1]);
+  const bytes = new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], {type:mime});
+}
+
+function compressImageFile(file){
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = ()=>{
+      img.onload = ()=>{
+        const max = 720;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(blob=>resolve(blob), 'image/jpeg', 0.78);
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadProfilePhoto(file){
+  if(!supabaseClient){
+    alert('Supabase לא נטען, אי אפשר לשמור תמונה בענן כרגע.');
+    return null;
+  }
+  setStatus('מעלה תמונה...', '');
+  const blob = await compressImageFile(file);
+  const path = `${state.userKey}/avatar-${Date.now()}.jpg`;
+  const { error } = await supabaseClient.storage
+    .from('profile-photos')
+    .upload(path, blob, { contentType:'image/jpeg', upsert:true });
+  if(error){
+    console.error(error);
+    setStatus('שגיאה בהעלאת תמונה', 'error');
+    alert('לא הצלחתי להעלות תמונה. ודא שהרצת את SQL יצירת Storage bucket וההרשאות.');
+    return null;
+  }
+  const { data } = supabaseClient.storage.from('profile-photos').getPublicUrl(path);
+  setStatus('תמונה הועלתה', 'ok');
+  return data.publicUrl;
+}
+
+
+document.querySelectorAll('.nav-item').forEach(btn=>btn.onclick=()=>{ 
+function dataUrlToBlob(dataUrl){
+  const parts = dataUrl.split(',');
+  const mime = parts[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+  const binary = atob(parts[1]);
+  const bytes = new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], {type:mime});
+}
+
+function compressImageFile(file){
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = ()=>{
+      img.onload = ()=>{
+        const max = 720;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(blob=>resolve(blob), 'image/jpeg', 0.78);
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadProfilePhoto(file){
+  if(!supabaseClient){
+    alert('Supabase לא נטען, אי אפשר לשמור תמונה בענן כרגע.');
+    return null;
+  }
+  setStatus('מעלה תמונה...', '');
+  const blob = await compressImageFile(file);
+  const path = `${state.userKey}/avatar-${Date.now()}.jpg`;
+  const { error } = await supabaseClient.storage
+    .from('profile-photos')
+    .upload(path, blob, { contentType:'image/jpeg', upsert:true });
+  if(error){
+    console.error(error);
+    setStatus('שגיאה בהעלאת תמונה', 'error');
+    alert('לא הצלחתי להעלות תמונה. ודא שהרצת את SQL יצירת Storage bucket וההרשאות.');
+    return null;
+  }
+  const { data } = supabaseClient.storage.from('profile-photos').getPublicUrl(path);
+  setStatus('תמונה הועלתה', 'ok');
+  return data.publicUrl;
+}
+
+
+document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); $(btn.dataset.view+'View').classList.add('active'); $('viewTitle').textContent=btn.textContent; });
 document.querySelectorAll('[data-go]').forEach(btn=>btn.onclick=()=>document.querySelector(`[data-view="${btn.dataset.go}"]`).click());
 ['name','title','bio','currentFocus','braindateOffer','lookingToMeet','link','location','email','phone'].forEach(k=>{ if($(k)) $(k).addEventListener('input',e=>{ state.me[k]=e.target.value; render(); }); });
-if($('photoInput')) $('photoInput').addEventListener('change',e=>{
-  const file=e.target.files[0];
+if($('photoInput')) $('photoInput').addEventListener('change', async e=>{
+  const file = e.target.files[0];
   if(!file) return;
-  const img = new Image();
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    img.onload = ()=>{
-      const max = 480;
-      const scale = Math.min(1, max / Math.max(img.width, img.height));
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.round(img.width * scale);
-      canvas.height = Math.round(img.height * scale);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      state.me.photo = canvas.toDataURL('image/jpeg', 0.72);
+  try{
+    if($('photoPreview')) $('photoPreview').classList.add('photo-uploading');
+    if($('publicPhoto')) $('publicPhoto').classList.add('photo-uploading');
+    const publicUrl = await uploadProfilePhoto(file);
+    if(publicUrl){
+      state.me.photo = publicUrl;
       render();
-    };
-    img.src = reader.result;
-  };
-  reader.readAsDataURL(file);
+      await saveProfileToDb();
+    }
+  }catch(err){
+    console.error(err);
+    alert('העלאת התמונה נכשלה.');
+  }finally{
+    if($('photoPreview')) $('photoPreview').classList.remove('photo-uploading');
+    if($('publicPhoto')) $('publicPhoto').classList.remove('photo-uploading');
+  }
 });
 if($('addOffer')) $('addOffer').onclick=()=>addCustomTag('customOffer','offers','offers');
 if($('addNeed')) $('addNeed').onclick=()=>addCustomTag('customNeed','needs','needs');
@@ -369,6 +480,9 @@ if($('seedDemo')) $('seedDemo').onclick=async()=>{ alert('בגרסת Supabase א
 if($('addDemoPerson')) $('addDemoPerson').onclick=()=>alert('בגרסת Supabase מוסיפים אנשים דרך מילוי פרופילים אמיתי.');
 if($('refreshMatches')) $('refreshMatches').onclick=async()=>{ await refreshFromDb(); render(); };
 if($('saveAll')) $('saveAll').onclick=saveProfileToDb;
+
+if($('saveBottom')) $('saveBottom').onclick=saveProfileToDb;
+
 if($('exportData')) $('exportData').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='sparkco-braindates-data.json'; a.click(); URL.revokeObjectURL(a.href); };
 if($('saveAdmin')) $('saveAdmin').onclick=async()=>{ state.communityName=$('communityName').value; state.taxonomy.offers=$('adminOffers').value.split(',').map(x=>x.trim()).filter(Boolean); state.taxonomy.needs=$('adminNeeds').value.split(',').map(x=>x.trim()).filter(Boolean); if(supabaseClient && state.communityId){ await supabaseClient.from('community_taxonomy').upsert({community_id:state.communityId,offers:state.taxonomy.offers,needs:state.taxonomy.needs,meeting_styles:state.taxonomy.meetingStyles,openness:state.taxonomy.openness,availability:state.taxonomy.availability},{onConflict:'community_id'}); } render(); };
 document.querySelectorAll('.report-tab').forEach(btn=>btn.onclick=()=>{ document.querySelectorAll('.report-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); state.activeReport=btn.dataset.report; render(); });

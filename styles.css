@@ -8,3 +8,9 @@
 .note-box{display:grid;gap:10px;margin-top:14px}
 .note-box textarea{min-height:90px}
 .small-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+.bottom-save-card{display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid rgba(225,255,126,.22);background:linear-gradient(145deg,rgba(225,255,126,.10),rgba(188,191,255,.05));border-radius:22px;padding:18px;margin-top:8px}
+.bottom-save-card p:not(.eyebrow){color:var(--muted);line-height:1.45;margin-top:6px}
+.bottom-save-btn{min-width:170px}
+.photo-uploading{opacity:.6;filter:saturate(.5)}
+@media (max-width:720px){.bottom-save-card{align-items:flex-start;flex-direction:column}.bottom-save-btn{width:100%}}
